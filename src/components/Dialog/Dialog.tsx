@@ -6,6 +6,7 @@ import { closeDialog } from '../../model/stores/dialog-slice';
 import { motion } from 'motion/react';
 import DialogCancelButton from './DialogCancelButton';
 import { useAppDispatch } from '../../model/stores/store-hooks';
+import { useIsMobile } from '../../hooks/is-mobile';
 
 interface DialogProps {
   variant?: 'default' | 'danger';
@@ -20,21 +21,26 @@ interface DialogProps {
   children: ReactNode;
 }
 
-const DialogContainer = styled(motion.div)`
+const DialogContainer = styled(motion.div)<{isMobile: boolean}>`
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Motion handles this, but base CSS is good */
+  transform: translate(-50%, -50%);
   z-index: 1000;
   
   display: flex;
   flex-direction: column;
-  min-width: 300px;
-  max-width: 450px;
   background: white;
   border-radius: 12px;
   padding: 0 40px 40px 40px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  
+  ${({ isMobile }) => isMobile ? `
+    width: calc(100% - 80px - 40px);
+  ` : `
+    min-width: 300px;
+    max-width: 450px;
+  `}
 `;
 
 const DialogHeader = styled.div`
@@ -92,6 +98,7 @@ const Dialog: React.FC<DialogProps> = ({
   children 
 }) => {
   const dispatch = useAppDispatch();
+  const isMobile = useIsMobile();
   const handleCloseDialog = () => dispatch(closeDialog())
 
   return (
@@ -107,6 +114,7 @@ const Dialog: React.FC<DialogProps> = ({
         animate={{ opacity: 1, scale: 1, y: '-50%', x: '-50%' }}
         exit={{ opacity: 0, scale: 0.9, y: '-50%', x: '-50%' }}
         transition={{ type: 'spring', damping: 10, stiffness: 100 }}
+        isMobile={isMobile}
       >
         <DialogCloseButton onClick={handleCloseDialog} />
         <DialogHeader>
