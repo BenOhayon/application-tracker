@@ -1,0 +1,185 @@
+import React from 'react'
+import Dialog from '../components/Dialog/Dialog'
+import { PiBuildingOfficeDuotone } from 'react-icons/pi';
+import styled, { css } from 'styled-components';
+import { FaRegAddressCard } from 'react-icons/fa';
+import TextInputField from '../components/InputField/TextInputField';
+import SelectInputField from '../components/InputField/SelectInputField';
+import type { Hybridness, InterviewPhase, LastPhase, NextPhase } from '../utils/types';
+import { createApplication } from '../model/stores/application-slice';
+import { useAppDispatch, useAppSelector } from '../model/stores/store-hooks';
+import { closeDialog } from '../model/stores/dialog-slice';
+import { setCompany, setRole, setSelectedHybridness, setSelectedLastPhase, setSelectedNextPhase } from '../model/stores/create-application-dialog-slice';
+
+interface CreateApplicationDialogProps {
+  company: string;
+  setCompany: (company: string) => void;
+  role: string;
+  setRole: (role: string) => void;
+  lastPhaseOptions: InterviewPhase[];
+  nextPhaseOptions: InterviewPhase[];
+  selectedLastPhase: LastPhase;
+  setSelectedLastPhase: (phase: LastPhase) => void;
+  selectedNextPhase: NextPhase;
+  setSelectedNextPhase: (phase: NextPhase) => void;
+  selectedHybridness: Hybridness;
+  setSelectedHybridness: (hybridness: Hybridness) => void;
+  hybridnessOptions: Hybridness[];
+  isCreateButtonAllowed: boolean;
+  handleCreateApplication: () => void;
+}
+
+const iconStyle = css`
+  width: 20px;
+  height: 20px;
+`;
+
+const OfficeIcon = styled(PiBuildingOfficeDuotone)`
+  ${iconStyle}
+`
+
+const RoleIcon = styled(FaRegAddressCard)`
+  ${iconStyle}
+`
+
+const CreateApplicationDialogContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+`;
+
+const InputsRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+`;
+
+const RowItem = styled.div`
+  flex-grow: 1;
+`
+
+const CreateApplicationDialog: React.FC<CreateApplicationDialogProps> = ({
+  company,
+  setCompany,
+  role,
+  setRole,
+  lastPhaseOptions,
+  nextPhaseOptions,
+  selectedLastPhase,
+  selectedNextPhase,
+  setSelectedLastPhase,
+  setSelectedNextPhase,
+  selectedHybridness,
+  setSelectedHybridness,
+  hybridnessOptions,
+  isCreateButtonAllowed,
+  handleCreateApplication,
+}) => {
+  return (
+    <Dialog
+      title='Add New Application'
+      subtitle='Track your progress and organize your professional journey.'
+      confirmButtonText='Add Application'
+      onConfirmButtonClick={handleCreateApplication}
+      isConfirmButtonDisabled={!isCreateButtonAllowed}
+      >
+        <CreateApplicationDialogContent>
+          <TextInputField
+            title="Company"
+            icon={<OfficeIcon />}
+            placeholder='e.g. Google'
+            value={company}
+            onChange={setCompany}
+          />
+          <TextInputField
+            title="Role"
+            icon={<RoleIcon />}
+            placeholder='e.g. Senior Product Designer'
+            value={role}
+            onChange={setRole}
+          />
+          <SelectInputField 
+            title="Hybridness"
+            options={hybridnessOptions} 
+            selectedValue={selectedHybridness} 
+            onSelect={(value) => setSelectedHybridness(value as Hybridness)}             
+          />
+          <InputsRow>
+            <RowItem>
+              <SelectInputField 
+                title="Last Interview Phase"
+                options={lastPhaseOptions} 
+                selectedValue={selectedLastPhase}
+                onSelect={(value) => setSelectedLastPhase(value as LastPhase)}             
+              />
+            </RowItem>
+            <RowItem>
+              <SelectInputField
+                isDisabled={selectedLastPhase === 'Offer'}
+                title="Next Interview Phase"
+                options={nextPhaseOptions} 
+                selectedValue={selectedNextPhase as string}
+                onSelect={(value) => setSelectedNextPhase(value as NextPhase)}             
+              />
+            </RowItem>
+          </InputsRow>
+        </CreateApplicationDialogContent>
+      </Dialog>
+  )
+}
+
+const WithStoreConnection = () => {
+  const dispatch = useAppDispatch();
+  const company = useAppSelector(state => state.createNewApplicationDialog.company);
+  const role = useAppSelector(state => state.createNewApplicationDialog.role);
+  const interviewPhases = useAppSelector(state => state.createNewApplicationDialog.interviewPhases);
+  const selectedLastPhase = useAppSelector(state => state.createNewApplicationDialog.selectedLastPhase);
+  const selectedNextPhase = useAppSelector(state => state.createNewApplicationDialog.selectedNextPhase);
+  const selectedHybridness = useAppSelector(state => state.createNewApplicationDialog.selectedHybridness);
+  const hybridnessOptions = useAppSelector(state => state.createNewApplicationDialog.hybridnessOptions);
+  const handleSetCompany = (company: string) => dispatch(setCompany(company));
+  const handleSetRole = (role: string) => dispatch(setRole(role));
+  const handleSetSelectedLastPhase = (lastPhase: LastPhase) => dispatch(setSelectedLastPhase(lastPhase));
+  const handleSetSelectedNextPhase = (nextPhase: NextPhase) => dispatch(setSelectedNextPhase(nextPhase));
+  const handleSetSelectedHybridness = (hybridness: Hybridness) => dispatch(setSelectedHybridness(hybridness));
+  const isCreateButtonAllowed = company !== '' && role !== '';
+  const lastPhaseOptions = interviewPhases.filter(phase => phase !== 'N/A');
+  const nextPhaseOptions = interviewPhases.filter(phase => phase !== 'Applied');
+  
+  const handleCreateApplication = () => {
+    dispatch(createApplication({
+      id: new Date().toUTCString(),
+      company,
+      role,
+      totalPhases: [],
+      hybridness: selectedHybridness,
+      createdAt: new Date().getTime(),
+      lastInteraction: new Date().getTime(),
+      lastPhase: selectedLastPhase,
+      nextPhase: selectedNextPhase,
+      disabled: false,
+    }))
+    dispatch(closeDialog());
+  }
+
+  return <CreateApplicationDialog
+    company={company}
+    setCompany={handleSetCompany}
+    role={role}
+    setRole={handleSetRole}
+    lastPhaseOptions={lastPhaseOptions}
+    nextPhaseOptions={nextPhaseOptions}
+    selectedLastPhase={selectedLastPhase}
+    setSelectedLastPhase={handleSetSelectedLastPhase}
+    selectedNextPhase={selectedNextPhase}
+    setSelectedNextPhase={handleSetSelectedNextPhase}
+    selectedHybridness={selectedHybridness}
+    setSelectedHybridness={handleSetSelectedHybridness}
+    hybridnessOptions={hybridnessOptions}
+    isCreateButtonAllowed={isCreateButtonAllowed}
+    handleCreateApplication={handleCreateApplication}
+  />;
+}
+
+export default WithStoreConnection;
