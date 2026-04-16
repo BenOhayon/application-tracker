@@ -72,8 +72,8 @@ const DialogCloseButton = styled(IoClose)`
   height: 20px;
   cursor: pointer;
   position: absolute;
-  top: 40px;
-  right: 40px;
+  top: 15px;
+  right: 15px;
   color: #566166;
 `;
 
