@@ -152,7 +152,7 @@ const MobileApplicationsTableItem: React.FC<MobileApplicationsTableItemProps> = 
     },
     {
       title: 'Next phase',
-      phaseName: nextPhase,
+      phaseName: nextPhase ?? 'Unknown',
     },
   ]
 

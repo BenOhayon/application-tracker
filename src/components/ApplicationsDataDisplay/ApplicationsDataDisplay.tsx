@@ -3,19 +3,27 @@ import { useIsMobile } from '../../hooks/is-mobile'
 import MobileApplicationsList from '../../components/MobileApplicationsList/MobileApplicationsList'
 import ApplicationsTable from '../../components/Table/ApplicationsTable'
 import { useAppSelector } from '../../model/stores/store-hooks'
+import type { ApplicationData } from '../../utils/types'
 
 interface ApplicationsDataDisplayProps {
-  tableTitle?: string;
+  title?: string;
   hasTableFilters?: boolean;
   maxVisibleEntries?: number;
+  applications: ApplicationData[];
+  shouldShowRejectedApplications: boolean;
+  itemsPerPage: number;
 }
 
 const ApplicationsDataDisplay: React.FC<ApplicationsDataDisplayProps> = ({
-  tableTitle,
-  hasTableFilters,
+  title,
+  hasTableFilters = true,
   maxVisibleEntries,
+  applications,
+  shouldShowRejectedApplications,
+  itemsPerPage,
 }) => {
-  let applications = useAppSelector(state => state.applications.applications);
+  const activeApplications = applications.filter(application => !application.disabled);
+  const filteredApplications = !hasTableFilters ? applications : shouldShowRejectedApplications ? applications : activeApplications;
   const isMobile = useIsMobile();
 
   if (maxVisibleEntries) {
@@ -26,12 +34,19 @@ const ApplicationsDataDisplay: React.FC<ApplicationsDataDisplayProps> = ({
     <>
       {
         isMobile ? (
-          <MobileApplicationsList data={applications} />
+          <MobileApplicationsList 
+            title={title} 
+            count={activeApplications.length} 
+            data={activeApplications} 
+          />
         ) : (
-          <ApplicationsTable 
-            title={tableTitle} 
-            hasFilters={hasTableFilters} 
+          <ApplicationsTable
+            data={filteredApplications}
+            title={title}
+            hasFilters={hasTableFilters}
             maxVisibleEntries={maxVisibleEntries} 
+            shouldShowRejectedApplications={shouldShowRejectedApplications} 
+            itemsPerPage={itemsPerPage}
           />
         )
       }
@@ -39,4 +54,24 @@ const ApplicationsDataDisplay: React.FC<ApplicationsDataDisplayProps> = ({
   )
 }
 
-export default ApplicationsDataDisplay
+const WithStoreConnection: React.FC<Pick<ApplicationsDataDisplayProps, 'title' | 'maxVisibleEntries' | 'hasTableFilters'>> = ({
+  title,
+  maxVisibleEntries, 
+  hasTableFilters = true,
+}) => {
+  const allApplications = useAppSelector(state => state.applications.applications);
+  const itemsPerPage = useAppSelector(state => state.applicationsTable.itemsPerPage);
+  const shouldShowRejectedApplications = useAppSelector(state => state.applicationsTable.showRejectedApplications);
+
+  return <ApplicationsDataDisplay 
+    title={title} 
+    maxVisibleEntries={maxVisibleEntries} 
+    hasTableFilters={hasTableFilters}
+    applications={allApplications}
+    itemsPerPage={itemsPerPage}
+    shouldShowRejectedApplications={shouldShowRejectedApplications}
+  />
+}
+
+
+export default WithStoreConnection

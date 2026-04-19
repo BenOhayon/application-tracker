@@ -13,7 +13,11 @@ const DashboardPage: React.FC = () => {
   return (
     <DashboardContainer>
       <AnalyticsSection />
-      <ApplicationsDataDisplay tableTitle='Active applications' hasTableFilters={false} maxVisibleEntries={5} />
+      <ApplicationsDataDisplay 
+        title='Active applications' 
+        hasTableFilters={false} 
+        maxVisibleEntries={5} 
+      />
     </DashboardContainer>
   )
 }

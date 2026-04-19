@@ -5,16 +5,23 @@ import MobileApplicationsTableItem from '../MobileApplicationsTableItem/MobileAp
 import ApplicationEmptyState from '../empty-states/ApplicationEmptyState/ApplicationEmptyState';
 
 interface MobileApplicationsListProps {
+  title?: string;
+  count?: number;
   data: TableRecord[];
 }
 
-const MobileApplicationsList: React.FC<MobileApplicationsListProps> = ({ data }) => {
+const MobileApplicationsList: React.FC<MobileApplicationsListProps> = ({ title, count, data }) => {
   if (!data || data.length === 0) {
     return <ApplicationEmptyState />
   }
   
   return (
-    <MobileTableDataList data={data} ItemComponent={MobileApplicationsTableItem} />
+    <MobileTableDataList 
+      title={title} 
+      count={count}
+      data={data} 
+      ItemComponent={MobileApplicationsTableItem} 
+    />
   )
 }
 
