@@ -3,7 +3,6 @@ import applicationSliceReducer from './application-slice';
 import createNewApplicationDialogSliceReducer from './create-application-dialog-slice';
 import markApplicationAsRejectedDialogSliceReducer from './mark-application-as-rejected-dialog-slice';
 import applicationsTableSliceReducer from './applications-table-slice';
-import sideBarSliceReducer from './sidebar-slice';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +10,6 @@ export const store = configureStore({
     createNewApplicationDialog: createNewApplicationDialogSliceReducer,
     markApplicationAsRejectedDialog: markApplicationAsRejectedDialogSliceReducer,
     applicationsTable: applicationsTableSliceReducer,
-    sideBar: sideBarSliceReducer,
   },
 });
 

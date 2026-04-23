@@ -7,9 +7,8 @@ import { PiNetwork } from 'react-icons/pi';
 import { useCurrentRoute } from '../../hooks/useCurrentRoute';
 import AppVersion from '../AppVersion/AppVersion';
 import styled from 'styled-components';
-import { useAppDispatch, useAppSelector } from '../../model/stores/store-hooks';
 import { motion } from 'motion/react';
-import { closeSideBar } from '../../model/stores/sidebar-slice';
+import { useCloseSideBar, useIsSidebarOpen } from '../../model/stores/sidebar-store';
 
 const SideBarContainer = styled.div<{isOpen: boolean}>`
   box-sizing: border-box;
@@ -51,8 +50,8 @@ const SideBarBackdrop = styled(motion.div)`
 `
 
 const SideBar: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const isOpen = useAppSelector(state => state.sideBar.isOpen);
+  const isOpen = useIsSidebarOpen();
+  const closeSideBar = useCloseSideBar();
   const currentRoute = useCurrentRoute();
   const sideBarOptions = [
     {
@@ -75,14 +74,12 @@ const SideBar: React.FC = () => {
     },
   ] as const satisfies SideBarOptionProps[];
 
-  const handleCloseSideBar = () => dispatch(closeSideBar())
-  
   return (
     <>
-      {isOpen && <SideBarBackdrop onClick={handleCloseSideBar} />}
+      {isOpen && <SideBarBackdrop onClick={closeSideBar} />}
       <SideBarContainer isOpen={isOpen}>
         <UpperSection>
-          {sideBarOptions.map(option => <div onClick={handleCloseSideBar}><SideBarOption key={option.label} {...option} /></div>)}
+          {sideBarOptions.map(option => <div onClick={closeSideBar}><SideBarOption key={option.label} {...option} /></div>)}
         </UpperSection>
         <AppVersion />
       </SideBarContainer>

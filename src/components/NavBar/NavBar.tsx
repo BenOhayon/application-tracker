@@ -4,10 +4,9 @@ import ImageBox from '../ImageBox/ImageBox'
 import AddApplicationButton from '../AddApplicationButton/AddApplicationButton'
 import { useIsMobile } from '../../hooks/is-mobile'
 import { HiOutlineMenu } from 'react-icons/hi'
-import { useAppDispatch } from '../../model/stores/store-hooks'
-import { openSideBar } from '../../model/stores/sidebar-slice'
 import { FaPlus } from 'react-icons/fa'
 import { useShowDialog } from '../../model/stores/dialog-store'
+import { useOpenSideBar } from '../../model/stores/sidebar-store'
 
 const NavBarContainer = styled.nav`
   box-sizing: border-box;
@@ -55,7 +54,7 @@ const CreateApplicationButton = styled(FaPlus)`
 
 const NavBar: React.FC = () => {
   const isMobile = useIsMobile();
-  const dispatch = useAppDispatch();
+  const openSideBar = useOpenSideBar();
   const showDialog = useShowDialog();
   const showCreateApplicationDialog = () => showDialog('createApplicationDialog');
   
@@ -63,7 +62,7 @@ const NavBar: React.FC = () => {
     <NavBarContainer>
       <NavBarLeft>
         <NavBarLogoContainer>
-          {isMobile ? <MenuImage onClick={() => dispatch(openSideBar())} /> : <ImageBox src='assets/logo.svg' alt='logo image' />}
+          {isMobile ? <MenuImage onClick={openSideBar} /> : <ImageBox src='assets/logo.svg' alt='logo image' />}
           <AppTitle>ApplicationTracker</AppTitle>
         </NavBarLogoContainer>
       </NavBarLeft>
