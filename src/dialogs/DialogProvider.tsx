@@ -1,9 +1,9 @@
-import { useAppSelector } from '../model/stores/store-hooks';
+import { useDialogStoreStack } from '../model/stores/dialog-store';
 import { dialogs } from './dialogs';
 import type React from 'react';
 
 export const DialogProvider: React.FC = () => {
-  const stack = useAppSelector((state) => state.dialogs.stack);
+  const stack = useDialogStoreStack();
 
   return (
     <>

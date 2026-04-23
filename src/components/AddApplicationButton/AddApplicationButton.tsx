@@ -1,23 +1,22 @@
 import React from 'react'
 import Button from '../Button/Button'
 import { FaPlus } from 'react-icons/fa'
-import { showDialog } from '../../model/stores/dialog-slice';
 import styled from 'styled-components';
-import { useAppDispatch } from '../../model/stores/store-hooks';
+import { useShowDialog } from '../../model/stores/dialog-store';
 
 const PlusIcon = styled(FaPlus)`
   fill: #fff;
 `
 
 const AddApplicationButton: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const showDialog = useShowDialog();
 
   return (
     <Button
       text='Add Application'
       icon={<PlusIcon />}
       color='#fff'
-      onClick={() => dispatch(showDialog('createApplicationDialog'))}
+      onClick={() => showDialog('createApplicationDialog')}
     />
   )
 }

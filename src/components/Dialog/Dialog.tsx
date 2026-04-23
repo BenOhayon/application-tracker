@@ -2,11 +2,10 @@ import { type ReactNode } from 'react';
 import styled from 'styled-components';
 import Button from '../Button/Button';
 import { IoClose } from 'react-icons/io5';
-import { closeDialog } from '../../model/stores/dialog-slice';
 import { motion } from 'motion/react';
 import DialogCancelButton from './DialogCancelButton';
-import { useAppDispatch } from '../../model/stores/store-hooks';
 import { useIsMobile } from '../../hooks/is-mobile';
+import { useCloseDialog } from '../../model/stores/dialog-store';
 
 interface DialogProps {
   variant?: 'default' | 'danger';
@@ -97,9 +96,9 @@ const Dialog: React.FC<DialogProps> = ({
   closeOnBackdropClick = false,
   children 
 }) => {
-  const dispatch = useAppDispatch();
+  const closeDialog = useCloseDialog();
   const isMobile = useIsMobile();
-  const handleCloseDialog = () => dispatch(closeDialog())
+  const handleCloseDialog = () => closeDialog();
 
   return (
     <>

@@ -4,7 +4,7 @@ import type { ApplicationData } from '../../utils/types'
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 import { useAppDispatch } from '../../model/stores/store-hooks';
 import { setApplicationCompany } from '../../model/stores/mark-application-as-rejected-dialog-slice';
-import { showDialog } from '../../model/stores/dialog-slice';
+import { useShowDialog } from '../../model/stores/dialog-store';
 
 interface ApplicationActionsProps {
   applicationCompany: ApplicationData['company'];
@@ -47,12 +47,13 @@ const ApplicationActions: React.FC<ApplicationActionsProps> = ({
   applicationId,
 }) => {
   const dispatch = useAppDispatch();
+  const showDialog = useShowDialog();
   const showMarkAsRejectedDialog = () => {
     dispatch(setApplicationCompany({ 
       company: applicationCompany, 
       id: applicationId 
     }));
-    dispatch(showDialog('markApplicationAsRejectedDialog'));
+    showDialog('markApplicationAsRejectedDialog');
   }
 
   return (

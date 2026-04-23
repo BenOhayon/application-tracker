@@ -6,8 +6,8 @@ import { useIsMobile } from '../../hooks/is-mobile'
 import { HiOutlineMenu } from 'react-icons/hi'
 import { useAppDispatch } from '../../model/stores/store-hooks'
 import { openSideBar } from '../../model/stores/sidebar-slice'
-import { showDialog } from '../../model/stores/dialog-slice'
 import { FaPlus } from 'react-icons/fa'
+import { useShowDialog } from '../../model/stores/dialog-store'
 
 const NavBarContainer = styled.nav`
   box-sizing: border-box;
@@ -56,7 +56,8 @@ const CreateApplicationButton = styled(FaPlus)`
 const NavBar: React.FC = () => {
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
-  const showCreateApplicationDialog = () => dispatch(showDialog('createApplicationDialog'))
+  const showDialog = useShowDialog();
+  const showCreateApplicationDialog = () => showDialog('createApplicationDialog');
   
   return (
     <NavBarContainer>

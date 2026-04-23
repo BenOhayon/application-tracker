@@ -1,13 +1,12 @@
 import React from 'react'
 import Button from '../Button/Button'
-import { useAppDispatch } from '../../model/stores/store-hooks';
-import { closeDialog } from '../../model/stores/dialog-slice';
+import { useCloseDialog } from '../../model/stores/dialog-store';
 
 const DialogCancelButton: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const closeDialog = useCloseDialog();
 
   return (
-    <Button text='Cancel' variant='ghost' color='#566166' onClick={() => dispatch(closeDialog())} />
+    <Button text='Cancel' variant='ghost' color='#566166' onClick={() => closeDialog()} />
   )
 }
 

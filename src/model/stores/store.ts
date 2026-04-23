@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-import dialogSliceReducer from './dialog-slice';
 import applicationSliceReducer from './application-slice';
 import createNewApplicationDialogSliceReducer from './create-application-dialog-slice';
 import markApplicationAsRejectedDialogSliceReducer from './mark-application-as-rejected-dialog-slice';
@@ -8,7 +7,6 @@ import sideBarSliceReducer from './sidebar-slice';
 
 export const store = configureStore({
   reducer: {
-    dialogs: dialogSliceReducer,
     applications: applicationSliceReducer,
     createNewApplicationDialog: createNewApplicationDialogSliceReducer,
     markApplicationAsRejectedDialog: markApplicationAsRejectedDialogSliceReducer,

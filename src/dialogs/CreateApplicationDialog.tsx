@@ -8,8 +8,8 @@ import SelectInputField from '../components/InputField/SelectInputField';
 import type { Hybridness, InterviewPhase, LastPhase, NextPhase } from '../utils/types';
 import { createApplication } from '../model/stores/application-slice';
 import { useAppDispatch, useAppSelector } from '../model/stores/store-hooks';
-import { closeDialog } from '../model/stores/dialog-slice';
 import { setCompany, setRole, setSelectedHybridness, setSelectedLastPhase, setSelectedNextPhase } from '../model/stores/create-application-dialog-slice';
+import { useCloseDialog } from '../model/stores/dialog-store';
 
 interface CreateApplicationDialogProps {
   company: string;
@@ -131,6 +131,7 @@ const CreateApplicationDialog: React.FC<CreateApplicationDialogProps> = ({
 
 const WithStoreConnection = () => {
   const dispatch = useAppDispatch();
+  const closeDialog = useCloseDialog();
   const company = useAppSelector(state => state.createNewApplicationDialog.company);
   const role = useAppSelector(state => state.createNewApplicationDialog.role);
   const interviewPhases = useAppSelector(state => state.createNewApplicationDialog.interviewPhases);
@@ -160,7 +161,7 @@ const WithStoreConnection = () => {
       nextPhase: selectedNextPhase,
       disabled: false,
     }))
-    dispatch(closeDialog());
+    closeDialog();
   }
 
   return <CreateApplicationDialog
