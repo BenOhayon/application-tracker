@@ -1,7 +1,7 @@
 import type { ApplicationData } from "../../utils/types";
 import { Repository } from "../Repository";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { MarkApplicationAsRejectedDialogSliceData } from "./mark-application-as-rejected-dialog-slice";
+import type { MarkApplicationAsRejectedDialogStoreData } from "./mark-application-as-rejected-dialog-store";
 
 interface ApplicationStoreData {
   applications: ApplicationData[];
@@ -26,7 +26,7 @@ const applicationSlice = createSlice({
       state.dataModel.createRecord(newApplication);
       state.applications = updatedApplications
     },
-    markApplicationAsRejected: (state, action: PayloadAction<MarkApplicationAsRejectedDialogSliceData>) => {
+    markApplicationAsRejected: (state, action: PayloadAction<MarkApplicationAsRejectedDialogStoreData>) => {
       const { id: applicationId, company } = action.payload;
       if (!applicationId || !company) return;
 

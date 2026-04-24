@@ -2,10 +2,11 @@ import React from 'react'
 import Dialog from '../components/Dialog/Dialog'
 import styled from 'styled-components';
 import { markApplicationAsRejected } from '../model/stores/application-slice';
-import { useAppDispatch, useAppSelector } from '../model/stores/store-hooks';
+import { useAppDispatch } from '../model/stores/store-hooks';
 import type { ApplicationData } from '../utils/types';
 import AlertMessage from '../components/AlertMessage/AlertMessage';
 import { useCloseDialog } from '../model/stores/dialog-store';
+import { useApplicationForRejectCompany, useApplicationForRejectId } from '../model/stores/mark-application-as-rejected-dialog-store';
 
 interface MarkApplicationAsRejectedDialogProps {
   applicationCompany: ApplicationData['company'] | null;
@@ -48,8 +49,8 @@ const MarkApplicationAsRejectedDialog: React.FC<MarkApplicationAsRejectedDialogP
 const WithStoreConnection = () => {
   const dispatch = useAppDispatch();
   const closeDialog = useCloseDialog();
-  const company = useAppSelector(state => state.markApplicationAsRejectedDialog.company);
-  const id = useAppSelector(state => state.markApplicationAsRejectedDialog.id);
+  const company = useApplicationForRejectCompany();
+  const id = useApplicationForRejectId();
 
   const handleConfirmRejection = () => {
     dispatch(markApplicationAsRejected({ company, id }));
