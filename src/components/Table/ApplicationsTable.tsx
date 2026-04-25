@@ -2,10 +2,9 @@ import React from 'react'
 import Table from './Table'
 import { applicationsColumnDef } from '../../utils/application-table-column-def';
 import ApplicationTableEmptyState from '../empty-states/ApplicationTableEmptyState/ApplicationTableEmptyState';
-import { useAppDispatch } from '../../model/stores/store-hooks';
 import Checkbox from '../Checkbox/Checkbox';
-import { setShowRejectedApplications } from '../../model/stores/applications-table-slice';
 import type { ApplicationData } from '../../utils/types';
+import { useSetShowRejectedApplications } from '../../model/stores/applications-table-store';
 
 interface ApplicationTableProps {
   title?: string;
@@ -24,7 +23,7 @@ const ApplicationsTable: React.FC<ApplicationTableProps> = ({
   shouldShowRejectedApplications, 
   itemsPerPage,
  }) => {
-  const dispatch = useAppDispatch();
+  const setShowRejectedApplications = useSetShowRejectedApplications();
 
   return (
     <Table 
@@ -33,7 +32,7 @@ const ApplicationsTable: React.FC<ApplicationTableProps> = ({
         hasFilters && { filters: <Checkbox 
           label='Show rejected applications'
           isChecked={shouldShowRejectedApplications}
-          onChecked={(showRejected: boolean) => dispatch(setShowRejectedApplications(showRejected))} 
+          onChecked={(showRejected: boolean) => setShowRejectedApplications(showRejected)} 
         /> 
       })}
       data={data} 

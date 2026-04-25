@@ -4,6 +4,7 @@ import MobileApplicationsList from '../../components/MobileApplicationsList/Mobi
 import ApplicationsTable from '../../components/Table/ApplicationsTable'
 import { useAppSelector } from '../../model/stores/store-hooks'
 import type { ApplicationData } from '../../utils/types'
+import { useItemsPerPage, useShowRejectedApplications } from '../../model/stores/applications-table-store'
 
 interface ApplicationsDataDisplayProps {
   title?: string;
@@ -60,8 +61,8 @@ const WithStoreConnection: React.FC<Pick<ApplicationsDataDisplayProps, 'title' |
   hasTableFilters = true,
 }) => {
   const allApplications = useAppSelector(state => state.applications.applications);
-  const itemsPerPage = useAppSelector(state => state.applicationsTable.itemsPerPage);
-  const shouldShowRejectedApplications = useAppSelector(state => state.applicationsTable.showRejectedApplications);
+  const itemsPerPage = useItemsPerPage();
+  const shouldShowRejectedApplications = useShowRejectedApplications();
 
   return <ApplicationsDataDisplay 
     title={title} 

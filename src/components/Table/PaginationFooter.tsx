@@ -2,8 +2,7 @@ import React from 'react'
 import type { TableRecord } from '../../utils/types'
 import styled from 'styled-components';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
-import { setItemsPerPage } from '../../model/stores/applications-table-slice';
-import { useAppDispatch } from '../../model/stores/store-hooks';
+import { useSetItemsPerPage } from '../../model/stores/applications-table-store';
 
 interface PaginationFooterProps {
   data: TableRecord[];
@@ -70,7 +69,7 @@ const PreviousPageButton = styled(FaChevronLeft)`
 `
 
 const PaginationFooter: React.FC<PaginationFooterProps> = ({ data, setVisibleData, itemsPerPage }) => {
-  const dispatch = useAppDispatch();
+  const setItemsPerPage = useSetItemsPerPage();
   const [currentPage, setCurrentPage] = React.useState(1);
   
   const totalPages = Math.ceil(data.length / itemsPerPage);
@@ -91,7 +90,7 @@ const PaginationFooter: React.FC<PaginationFooterProps> = ({ data, setVisibleDat
   }
 
   const handleItemsPerPageChange = (newItemsPerPage: number) => {
-    dispatch(setItemsPerPage(newItemsPerPage));
+    setItemsPerPage(newItemsPerPage);
     setVisibleData(data.slice(0, newItemsPerPage));
     setCurrentPage(1);
   }

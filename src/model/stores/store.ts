@@ -1,13 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import applicationSliceReducer from './application-slice';
 import createNewApplicationDialogSliceReducer from './create-application-dialog-slice';
-import applicationsTableSliceReducer from './applications-table-slice';
 
 export const store = configureStore({
   reducer: {
     applications: applicationSliceReducer,
     createNewApplicationDialog: createNewApplicationDialogSliceReducer,
-    applicationsTable: applicationsTableSliceReducer,
   },
 });
 
