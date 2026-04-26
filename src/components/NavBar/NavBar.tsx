@@ -10,7 +10,7 @@ import { useOpenSideBar } from '../../model/stores/sidebar-store'
 
 const NavBarContainer = styled.nav`
   box-sizing: border-box;
-  height: 60px;
+  height: 70px;
   padding: 7px 14px;
   display: flex;
   align-items: center;

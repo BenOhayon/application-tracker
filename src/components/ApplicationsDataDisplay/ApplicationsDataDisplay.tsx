@@ -37,8 +37,9 @@ const ApplicationsDataDisplay: React.FC<ApplicationsDataDisplayProps> = ({
         isMobile ? (
           <MobileApplicationsList 
             title={title} 
-            count={activeApplications.length} 
-            data={activeApplications} 
+            count={filteredApplications.length} 
+            data={filteredApplications} 
+            hasFilters={hasTableFilters}
           />
         ) : (
           <ApplicationsTable
@@ -46,7 +47,6 @@ const ApplicationsDataDisplay: React.FC<ApplicationsDataDisplayProps> = ({
             title={title}
             hasFilters={hasTableFilters}
             maxVisibleEntries={maxVisibleEntries} 
-            shouldShowRejectedApplications={shouldShowRejectedApplications} 
             itemsPerPage={itemsPerPage}
           />
         )

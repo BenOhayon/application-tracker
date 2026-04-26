@@ -1,11 +1,13 @@
 import React from 'react'
 import type { TableRecord } from '../../utils/types'
 import styled from 'styled-components';
+import ApplicationEmptyState from '../empty-states/ApplicationEmptyState/ApplicationEmptyState';
 
 interface MobileTableDataListProps {
   title?: string;
   count?: number;
   data: TableRecord[];
+  filters?: React.ReactElement;
   ItemComponent: React.ComponentType<{ record: TableRecord }>;
 }
 
@@ -31,6 +33,12 @@ const MobileTableDataListHeader = styled.div`
   align-items: center;
 `
 
+const MobileTableDataListTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`
+
 const MobileTableDataListTitle = styled.h2`
   font-size: 24px;
 `
@@ -40,18 +48,25 @@ const MobileTableDataListCount = styled.p`
   color: #566166;
 `
 
-const MobileTableDataList: React.FC<MobileTableDataListProps> = ({ title, count, data, ItemComponent }) => {
+const MobileTableDataList: React.FC<MobileTableDataListProps> = ({ title, count, data, filters, ItemComponent }) => {
   return (
     <MobileTableDataListContainer>
-      {(title || count) && <MobileTableDataListHeader>
-        <MobileTableDataListTitle>{title}</MobileTableDataListTitle>
-        {count && <MobileTableDataListCount>{count} Total</MobileTableDataListCount>}
+      {(title || count || filters) && <MobileTableDataListHeader>
+        <MobileTableDataListTitleContainer>
+          <MobileTableDataListTitle>
+            {title}
+          </MobileTableDataListTitle>
+          {filters}
+        </MobileTableDataListTitleContainer>
+        {count !== undefined && <MobileTableDataListCount>{count} Total</MobileTableDataListCount>}
       </MobileTableDataListHeader>}
-      <MobileTableDataListContent> 
-        {
-          data.map(record => <ItemComponent key={record.id} record={record} />)
-        }
-      </MobileTableDataListContent>
+      {
+        (!data || data.length === 0) ? <ApplicationEmptyState /> :  <MobileTableDataListContent> 
+          {
+            data.map(record => <ItemComponent key={record.id} record={record} />)
+          }
+        </MobileTableDataListContent>
+      }
     </MobileTableDataListContainer>
   )
 }
