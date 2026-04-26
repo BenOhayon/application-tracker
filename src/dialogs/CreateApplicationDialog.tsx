@@ -7,9 +7,9 @@ import TextInputField from '../components/InputField/TextInputField';
 import SelectInputField from '../components/InputField/SelectInputField';
 import type { Hybridness, InterviewPhase, LastPhase, NextPhase } from '../utils/types';
 import { createApplication } from '../model/stores/application-slice';
-import { useAppDispatch, useAppSelector } from '../model/stores/store-hooks';
-import { setCompany, setRole, setSelectedHybridness, setSelectedLastPhase, setSelectedNextPhase } from '../model/stores/create-application-dialog-slice';
+import { useAppDispatch } from '../model/stores/store-hooks';
 import { useCloseDialog } from '../model/stores/dialog-store';
+import { useCompany, useHybridnessOptions, useInterviewPhases, useResetData, useRole, useSelectedHybridness, useSelectedLastPhase, useSelectedNextPhase, useSetCompany, useSetRole, useSetSelectedHybridness, useSetSelectedLastPhase, useSetSelectedNextPhase } from '../model/stores/create-application-dialog-store';
 
 interface CreateApplicationDialogProps {
   company: string;
@@ -132,18 +132,19 @@ const CreateApplicationDialog: React.FC<CreateApplicationDialogProps> = ({
 const WithStoreConnection = () => {
   const dispatch = useAppDispatch();
   const closeDialog = useCloseDialog();
-  const company = useAppSelector(state => state.createNewApplicationDialog.company);
-  const role = useAppSelector(state => state.createNewApplicationDialog.role);
-  const interviewPhases = useAppSelector(state => state.createNewApplicationDialog.interviewPhases);
-  const selectedLastPhase = useAppSelector(state => state.createNewApplicationDialog.selectedLastPhase);
-  const selectedNextPhase = useAppSelector(state => state.createNewApplicationDialog.selectedNextPhase);
-  const selectedHybridness = useAppSelector(state => state.createNewApplicationDialog.selectedHybridness);
-  const hybridnessOptions = useAppSelector(state => state.createNewApplicationDialog.hybridnessOptions);
-  const handleSetCompany = (company: string) => dispatch(setCompany(company));
-  const handleSetRole = (role: string) => dispatch(setRole(role));
-  const handleSetSelectedLastPhase = (lastPhase: LastPhase) => dispatch(setSelectedLastPhase(lastPhase));
-  const handleSetSelectedNextPhase = (nextPhase: NextPhase) => dispatch(setSelectedNextPhase(nextPhase));
-  const handleSetSelectedHybridness = (hybridness: Hybridness) => dispatch(setSelectedHybridness(hybridness));
+  const company = useCompany();
+  const role = useRole();
+  const interviewPhases = useInterviewPhases();
+  const selectedLastPhase = useSelectedLastPhase();
+  const selectedNextPhase = useSelectedNextPhase();
+  const selectedHybridness = useSelectedHybridness();
+  const hybridnessOptions = useHybridnessOptions();
+  const setCompany = useSetCompany();
+  const setRole = useSetRole();
+  const setSelectedLastPhase = useSetSelectedLastPhase();
+  const setSelectedNextPhase = useSetSelectedNextPhase();
+  const setSelectedHybridness = useSetSelectedHybridness();
+  const resetData = useResetData();
   const isCreateButtonAllowed = company !== '' && role !== '';
   const lastPhaseOptions = interviewPhases.filter(phase => phase !== 'N/A');
   const nextPhaseOptions = interviewPhases.filter(phase => phase !== 'Applied');
@@ -161,22 +162,23 @@ const WithStoreConnection = () => {
       nextPhase: selectedNextPhase,
       disabled: false,
     }))
+    resetData();
     closeDialog();
   }
 
   return <CreateApplicationDialog
     company={company}
-    setCompany={handleSetCompany}
+    setCompany={setCompany}
     role={role}
-    setRole={handleSetRole}
+    setRole={setRole}
     lastPhaseOptions={lastPhaseOptions}
     nextPhaseOptions={nextPhaseOptions}
     selectedLastPhase={selectedLastPhase}
-    setSelectedLastPhase={handleSetSelectedLastPhase}
+    setSelectedLastPhase={setSelectedLastPhase}
     selectedNextPhase={selectedNextPhase}
-    setSelectedNextPhase={handleSetSelectedNextPhase}
+    setSelectedNextPhase={setSelectedNextPhase}
     selectedHybridness={selectedHybridness}
-    setSelectedHybridness={handleSetSelectedHybridness}
+    setSelectedHybridness={setSelectedHybridness}
     hybridnessOptions={hybridnessOptions}
     isCreateButtonAllowed={isCreateButtonAllowed}
     handleCreateApplication={handleCreateApplication}
