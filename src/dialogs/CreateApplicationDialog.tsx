@@ -6,10 +6,9 @@ import { FaRegAddressCard } from 'react-icons/fa';
 import TextInputField from '../components/InputField/TextInputField';
 import SelectInputField from '../components/InputField/SelectInputField';
 import type { Hybridness, InterviewPhase, LastPhase, NextPhase } from '../utils/types';
-import { createApplication } from '../model/stores/application-slice';
-import { useAppDispatch } from '../model/stores/store-hooks';
 import { useCloseDialog } from '../model/stores/dialog-store';
 import { useCompany, useHybridnessOptions, useInterviewPhases, useResetData, useRole, useSelectedHybridness, useSelectedLastPhase, useSelectedNextPhase, useSetCompany, useSetRole, useSetSelectedHybridness, useSetSelectedLastPhase, useSetSelectedNextPhase } from '../model/stores/create-application-dialog-store';
+import { useCreateApplication } from '../model/stores/applications-store';
 
 interface CreateApplicationDialogProps {
   company: string;
@@ -130,7 +129,6 @@ const CreateApplicationDialog: React.FC<CreateApplicationDialogProps> = ({
 }
 
 const WithStoreConnection = () => {
-  const dispatch = useAppDispatch();
   const closeDialog = useCloseDialog();
   const company = useCompany();
   const role = useRole();
@@ -144,13 +142,14 @@ const WithStoreConnection = () => {
   const setSelectedLastPhase = useSetSelectedLastPhase();
   const setSelectedNextPhase = useSetSelectedNextPhase();
   const setSelectedHybridness = useSetSelectedHybridness();
+  const createApplication = useCreateApplication();
   const resetData = useResetData();
   const isCreateButtonAllowed = company !== '' && role !== '';
   const lastPhaseOptions = interviewPhases.filter(phase => phase !== 'N/A');
   const nextPhaseOptions = interviewPhases.filter(phase => phase !== 'Applied');
   
   const handleCreateApplication = () => {
-    dispatch(createApplication({
+    createApplication({
       id: new Date().toUTCString(),
       company,
       role,
@@ -161,7 +160,7 @@ const WithStoreConnection = () => {
       lastPhase: selectedLastPhase,
       nextPhase: selectedNextPhase,
       disabled: false,
-    }))
+    })
     resetData();
     closeDialog();
   }

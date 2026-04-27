@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import AnalyticsBox from '../AnalyticsBox/AnalyticsBox';
 import { IoMdCalendar, IoMdCloseCircleOutline } from 'react-icons/io';
 import { GiStarMedal } from 'react-icons/gi';
-import { useAppSelector } from '../../model/stores/store-hooks';
+import { useApplications } from '../../model/stores/applications-store';
 
 interface AnalyticsSectionProps {
   analytics: AnalyticsData[];
@@ -61,7 +61,7 @@ const AnalyticsSection: React.FC<AnalyticsSectionProps> = ({ analytics }) => {
 }
 
 const WithStoreConnection = () => {
-  const applications = useAppSelector(state => state.applications.applications);
+  const applications = useApplications();
   const appliedCount = applications.length;
   const interviewCount = applications.filter(application => !['Applied', 'Offer'].includes(application.lastPhase)).length;
   const offersCount = applications.filter(application => application.lastPhase === 'Offer').length;

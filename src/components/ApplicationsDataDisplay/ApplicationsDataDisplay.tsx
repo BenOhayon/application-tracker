@@ -2,9 +2,9 @@ import React from 'react'
 import { useIsMobile } from '../../hooks/is-mobile'
 import MobileApplicationsList from '../../components/MobileApplicationsList/MobileApplicationsList'
 import ApplicationsTable from '../../components/Table/ApplicationsTable'
-import { useAppSelector } from '../../model/stores/store-hooks'
 import type { ApplicationData } from '../../utils/types'
 import { useItemsPerPage, useShowRejectedApplications } from '../../model/stores/applications-table-store'
+import { useApplications } from '../../model/stores/applications-store'
 
 interface ApplicationsDataDisplayProps {
   title?: string;
@@ -60,7 +60,7 @@ const WithStoreConnection: React.FC<Pick<ApplicationsDataDisplayProps, 'title' |
   maxVisibleEntries, 
   hasTableFilters = true,
 }) => {
-  const allApplications = useAppSelector(state => state.applications.applications);
+  const applications = useApplications();
   const itemsPerPage = useItemsPerPage();
   const shouldShowRejectedApplications = useShowRejectedApplications();
 
@@ -68,7 +68,7 @@ const WithStoreConnection: React.FC<Pick<ApplicationsDataDisplayProps, 'title' |
     title={title} 
     maxVisibleEntries={maxVisibleEntries} 
     hasTableFilters={hasTableFilters}
-    applications={allApplications}
+    applications={applications}
     itemsPerPage={itemsPerPage}
     shouldShowRejectedApplications={shouldShowRejectedApplications}
   />
